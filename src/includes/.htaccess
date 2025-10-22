@@ -1,0 +1,4 @@
+SetEnv DB tjt4131
+SetEnv DB_PASSWORD Carditis2-blas
+SetEnv DB_SERVER localhost
+SetEnv DB_USER tjt4131
