@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $username = $_POST["username"];
@@ -17,31 +18,43 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
         $result = get_user($pdo, $username, $pwd);
+        $_SESSION["result"] = $result;
 
         if (is_username_wrong($result)) {
-            $errors["empty_input"] = "fill in all fields";
-        }
-        if (!is_username_wrong($result) && is_password_wrong($pwd, $result["pwd"])) {
-            $errors["incorrect_login"] = "incorrect login info";
+            $errors["incorrect_login"] = "incorrect username provided";
         }
 
-        require_once 'config.session.inc.php';
+        if (!is_username_wrong($result) && is_password_wrong($pwd, $result["Password"])) {
+            $errors["incorrect_login"] = "incorrect password provided";
+        }
 
         if ($errors) {
-            $_SESSION["errors_signup"] = $errors;
-            header("Location: ../views/index.php");
+            $_SESSION["errors_login"] = $errors;
+            header("Location: ../index.php");
             die();
         }
 
         $newSessionId = session_create_id();
-        $sessionId = $newSessionId . "_" . $result["id"];
+        $sessionId = $newSessionId . "_" . $result["Id"];
         session_id($sessionId);
+
+        $_SESSION["user_id"] = $result["Id"];
+        $_SESSION["user_username"] = htmlspecialchars($result["Username"]);
+
+        $_SESSION["last_regeneration"] = time();
+
+        header("Location: ../index.php?login=success");
+        
+        // clean up
+        $pdo = null;
+        $stmt = null;
+        die();
 
     } catch (PDOException $e) {
         die("query failed: " . $e->getMessage());
 
     }
 } else {
-    header("Location: ../views/index.php");
+    header("Location: ../index.php");
     die();
 }
