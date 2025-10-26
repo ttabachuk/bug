@@ -18,7 +18,7 @@ class ProjectRepository {
     public function insert($project) {
 
         if ($this->exists($project)) {
-            $this->messenger->put("unable to create - project {$project} already exists");
+            $this->messenger->put("unable to create - project '{$project}' already exists");
             $this->messenger->save();
         } else {
             $query = "INSERT INTO {$this->table} (Project) VALUES(:project)";
@@ -31,7 +31,7 @@ class ProjectRepository {
     public function update($id, $project) {
 
         if ($this->exists($project)) {
-            $this->messenger->put("unable to update - project {$project} already exists");
+            $this->messenger->put("unable to update - project '{$project}' already exists");
             $this->messenger->save();
         } else {
             $query = "UPDATE {$this->table} SET Project = :project WHERE Id = :id";
@@ -52,7 +52,9 @@ class ProjectRepository {
     }
 
     public function delete($id) {
-        $query = "DELETE FROM {$this->table} WHERE Id = (:id)";
+        $query = "UPDATE user_details SET ProjectId = NULL WHERE ProjectId = :id;
+                  DELETE FROM bugs WHERE projectId = :id;
+                  DELETE FROM {$this->table} WHERE Id = (:id);";
         $stmt = $this->pdo->prepare($query);
         $stmt->bindParam(":id", $id);
         $stmt->execute();
@@ -64,7 +66,7 @@ class ProjectRepository {
         $stmt->bindParam(":id", $id);
         $stmt->execute();
 
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Project');
+        $stmt->setFetchMode(PDO::FETCH_CLASS, $this->model);
         return $stmt->fetch();
     }
 

@@ -1,11 +1,14 @@
 <?php
-    require_once '../components/header.php';
-    require_once '../utils/Messenger.php';
-    require_once '../repositories/ProjectRepository.php';
-    require_once '../includes/dbh.inc.php';
-    require_once '../utils/Messenger.php';
+require_once '../handlers/redirect_login.php';
+dieIfNotLoggedIn();
 
-    $repository = new ProjectRepository($pdo, new Messenger());
+require_once '../components/header.php';
+require_once '../utils/Messenger.php';
+require_once '../repositories/ProjectRepository.php';
+require_once '../includes/dbh.inc.php';
+require_once '../utils/Messenger.php';
+
+$repository = new ProjectRepository($pdo, new Messenger());
 ?>
 
 <!DOCTYPE html>

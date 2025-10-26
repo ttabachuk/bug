@@ -1,5 +1,8 @@
 <?php
-    include('../components/header.php');
+require_once '../handlers/redirect_login.php';
+dieIfNotLoggedIn();
+
+require_once '../components/header.php';
 ?>
 
 <!DOCTYPE html>
@@ -12,8 +15,18 @@
 </head>
 <body>
     <h3>admin</h3>
-    <a href="../views/users.php">user administration</a>
-    <br>
-    <a href="../views/projects.php">project administration</a>
+<?php
+// users
+if ($_SESSION['roleId'] == '3') {
+    echo "<p>this page is only visible for managers and admins</p>";
+}
+else {
+    echo "<a href='../views/projects.php'>project administration</a><br>";
+    // admin
+    if ($_SESSION['roleId'] == '1') {
+        echo "<a href='../views/users.php'>user administration</a><br>";
+    }
+}
+?>
 </body>
 </html>

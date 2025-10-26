@@ -1,4 +1,8 @@
 <?php
+
+require_once './redirect_login.php';
+dieIfNotLoggedIn();
+
 require_once '../repositories/ProjectRepository.php';
 require_once '../includes/dbh.inc.php';
 require_once '../utils/Messenger.php';

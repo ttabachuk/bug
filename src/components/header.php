@@ -9,7 +9,7 @@
     <nav>
         <a href="../pages/admin.php">admin</a> |
         <a href="../pages/bug.php">bug</a> |
-        <a href="../pages/logout.php">logout</a>
+        <a href="../includes/logout.inc.php">logout</a>
     </nav>
     <hr>
 </body>

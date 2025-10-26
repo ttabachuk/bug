@@ -1,14 +1,17 @@
 <?php
-    require_once '../components/header.php';
-    require_once '../utils/Messenger.php';
-    require_once '../repositories/UserRepository.php';
-    require_once '../repositories/ProjectRepository.php';
-    require_once '../includes/dbh.inc.php';
-    require_once '../utils/Messenger.php';
 
-    $projectRepository = new projectRepository($pdo, new Messenger());
-    $projects = $projectRepository->getAll();
-    $userRepository = new UserRepository($pdo, new Messenger());
+require_once '../handlers/redirect_login.php';
+dieIfNotLoggedIn();
+
+require_once '../components/header.php';
+require_once '../utils/Messenger.php';
+require_once '../repositories/UserRepository.php';
+require_once '../repositories/ProjectRepository.php';
+require_once '../includes/dbh.inc.php';
+
+$projectRepository = new projectRepository($pdo, new Messenger());
+$projects = $projectRepository->getAll();
+$userRepository = new UserRepository($pdo, new Messenger());
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +19,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>admin</title>
+    <title>users</title>
     <link rel="stylesheet" type="text/css" href="../styles.css">
 </head>
 <body>
@@ -74,7 +77,14 @@ Messenger::propigate();
 function formatAsTable($users) {
 
     echo "<table border='1' cellpadding='5'>";
-    echo "<tr><th>id</th><th>username</th><th>roleid</th><th>projectid</th><th>name</th><th>actions</th></tr>";
+    echo "<tr>
+            <th>id</th>
+            <th>username</th>
+            <th>role id</th>
+            <th>project id</th>
+            <th>name</th>
+            <th>actions</th>
+        </tr>";
 
     foreach ($users as $user) {
         $id = $user->getId();
@@ -92,6 +102,7 @@ function formatAsTable($users) {
         echo "<td>
             <form method='POST' action='../handlers/delete_user.php' style='display:inline-block;' onsubmit=\"return confirm('Are you sure you want to delete this user?');\">
                 <input type='hidden' name='id' value='{$id}'>
+                <input type='hidden' name='username' value='{$username}'>
                 <input type='submit' value='delete'>
             </form>
         </td>";

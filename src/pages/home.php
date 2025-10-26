@@ -1,5 +1,7 @@
 <?php
-    include('../components/header.php');
+include('../components/header.php');
+require_once '../handlers/redirect_login.php';
+dieIfNotLoggedIn();
 ?>
 
 <!DOCTYPE html>

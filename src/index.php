@@ -1,13 +1,13 @@
 <?php
 session_start();
-require_once 'includes/login_view.inc.php';
+require_once 'utils/Messenger.php';
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
     <title>login</title>
-    <link rel="stylesheet" type="text/css" href="../styles.css">
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
     <h3>login</h3>
@@ -17,9 +17,18 @@ require_once 'includes/login_view.inc.php';
         <button>login</button>
     </form>
 
-    <?php
-    check_login_errors();
-    ?>
+<?php
+if (isset($_SESSION['authenticated']) && $_SESSION['authenticated'] == true) {
+    echo "user logged in successfully!";
+
+    // redirect to home page
+    header("Refresh: 1; url=pages/home.php");
+}
+?>
+
+<?php
+Messenger::propigate();
+?>
 
 </body>
 </html>
